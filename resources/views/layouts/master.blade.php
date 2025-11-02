@@ -18,7 +18,7 @@
 
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 
-    {{-- @stack('styles') --}}
+    @stack('styles')
 </head>
 <body>
     <div id="app">
@@ -87,7 +87,7 @@
         </nav>
 
         <main class="py-4">
-            {{-- <div class="container">
+            <div class="container">
                 @if (isset($errors) && $errors->any())
                     <div class="alert alert-danger" role="alert">
                         <ul>
@@ -109,7 +109,7 @@
                         {{ session('status') }}
                     </div>
                 @endif
-            </div> --}}
+            </div>
 
             @yield('content')
 
@@ -126,6 +126,6 @@
 
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 
-    {{-- @stack('scripts') --}}
+    @stack('scripts')
 </body>
 </html>
