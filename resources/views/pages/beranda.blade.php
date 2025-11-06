@@ -9,9 +9,10 @@
 
                 <div class="card-body">
                      {{-- <form action="{{ route('pay') }}" method="POST" id="paymentForm"> --}}
-                     <form action="" method="POST" id="paymentForm">
+                     <form action="/pay" method="POST" id="paymentForm">
                         @csrf
                         <div class="row">
+                            {{-- Value --}}
                             <div class="col-auto">
                                 <label>How much you want to pay?</label>
                                 <input
@@ -27,6 +28,7 @@
                                     Use values with up to two decimal positions, using a dot "."
                                 </small>
                             </div>
+                            {{-- Currency --}}
                             <div class="col-auto">
                                 <label>Currency</label>
                                 <select class="custom-select" name="currency" required>
@@ -44,6 +46,7 @@
                                     Select the desired payment platform
                                 </label>
                                 <div class="form-group" id="toggler">
+                                    {{-- //Paymen_Platform --}}
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         @foreach ($paymentPlatforms as $paymentPlatform)
                                             <label
