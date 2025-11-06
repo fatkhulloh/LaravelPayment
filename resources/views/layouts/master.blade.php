@@ -34,13 +34,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        {{-- @if (! optional(auth()->user())->hasActiveSubscription())
+                        {{-- @if (! optional(auth()->user())->hasActiveSubscription()) --}}
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary" href="{{ route('subscribe.show') }}">
+                                {{-- <a class="btn btn-outline-primary" href="{{ route('subscribe.show') }}"> --}}
+                                <a class="btn btn-outline-primary" href="/subscribe">
                                     Subscribe
                                 </a>
                             </li>
-                        @endif --}}
+                        {{-- @endif --}}
                         <li class="nav-item">
                             {{-- <a class="nav-link" href="{{ route('home') }}">Home</a> --}}
                             <a class="nav-link" href="/">Home</a>
@@ -50,19 +51,19 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        {{-- @guest --}}
+                        @guest
                             <li class="nav-item">
                                 {{-- <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a> --}}
                                 <a class="nav-link" href="/login">{{ __('Login') }}</a>
                             </li>
-                            {{-- @if (Route::has('register')) --}}
+                            @if (Route::has('register'))
                                 <li class="nav-item">
                                     {{-- <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a> --}}
                                     <a class="nav-link" href="/register">{{ __('Register') }}</a>
                                 </li>
-                            {{-- @endif --}}
-                        {{-- @else --}}
-                            {{-- <li class="nav-item dropdown">
+                            @endif
+                        @else
+                            <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
@@ -79,8 +80,8 @@
                                         @csrf
                                     </form>
                                 </div>
-                            </li> --}}
-                        {{-- @endguest --}}
+                            </li>
+                        @endguest
                     </ul>
                 </div>
             </div>
