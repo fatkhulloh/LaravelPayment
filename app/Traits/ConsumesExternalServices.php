@@ -10,25 +10,29 @@ trait ConsumesExternalServices
         $client = new Client([
             'base_uri' => $this->baseUri,
         ]);
-        if(method_exists($this, 'resolveAuthorization'))
-        {
+
+        if (method_exists($this, 'resolveAuthorization')) {
             $this->resolveAuthorization($queryParams, $formParams, $headers);
         }
-        $response = $client->request($method, $requestUrl, [
-            $isJsonRequest  ? +'json' : 'form_params' =>$formParams,
+
+        $options = [
             'headers' => $headers,
             'query' => $queryParams,
-        ]);
+        ];
+
+        if ($isJsonRequest) {
+            $options['json'] = $formParams;
+        } else {
+            $options['form_params'] = $formParams;
+        }
+
+        $response = $client->request($method, $requestUrl, $options);
         $response = $response->getBody()->getContents();
 
-        if(method_exists($this, 'decodeResponse'))
-        {
+        if (method_exists($this, 'decodeResponse')) {
             $response = $this->decodeResponse($response);
         }
+
         return $response;
     }
-
 }
-
-
-?>
