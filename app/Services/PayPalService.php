@@ -85,4 +85,32 @@ class PayPalService
             true
         );
     }
+
+    // public function captureOrder($orderId)
+    public function captureOrder($approvalId)
+    {
+        // return $this->makeRequest(
+        //         'POST',
+        //         "/v2/checkout/orders/{$orderId}/capture",
+        //         [],
+        //         '{}', // <── penting! dikirim string JSON kosong
+        //         [
+        //             'Content-Type' => 'application/json',
+        //         ],
+        //         true
+        //     );
+
+
+    // dd($result); // tampilkan hasil respons PayPal
+         return $this->makeRequest(
+            'POST',
+            "/v2/checkout/orders/{$approvalId}/capture",
+            [],
+            [],
+            [
+                'Content-Type' => 'application/json'
+            ],
+        );
+    }
+
 }

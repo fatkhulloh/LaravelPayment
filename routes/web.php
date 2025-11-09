@@ -29,5 +29,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::post('/pay', [PaymentController::class, 'pay']);
-Route::post('/approval', [PaymentController::class, 'approval']);
-Route::post('/canceled', [PaymentController::class, 'canceled']);
+// Route::post('/approval', [PaymentController::class, 'approval']);
+// Route::post('/canceled', [PaymentController::class, 'canceled']);
+Route::get('/approval', [PaymentController::class, 'approval']);
+Route::get('/canceled', [PaymentController::class, 'canceled']);
