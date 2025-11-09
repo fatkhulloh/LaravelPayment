@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Traits\ConsumesExternalServices;
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 
 class PayPalService
 {
@@ -111,6 +112,28 @@ class PayPalService
                 'Content-Type' => 'application/json'
             ],
         );
+    }
+    public function handlePayment(Request $req)
+    {
+        // $order = $this->createOrder($req->value, $req->currency);
+        // // $orderLink = collect($order->link);
+        // // $approve = $orderLink->where('rel', 'approve')->first;
+        // // dd($order);
+        // $orderLinks = collect($order['links']);
+        // $approve = $orderLinks->firstWhere('rel', 'approve');
+        // return redirect($approve->href);
+
+
+          $order = $this->createOrder($req->value, $req->currency);
+
+        // Kumpulkan semua link dari respons PayPal
+        $orderLinks = collect($order->links);
+
+        // Ambil link untuk "approve"
+        $approve = $orderLinks->where('rel', 'approve')->first();
+
+        // Redirect ke halaman approval PayPal
+        return redirect($approve->href);
     }
 
 }

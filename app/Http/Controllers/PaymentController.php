@@ -4,11 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Currency;
 use App\Models\PaymentPlatform;
+use App\Resolvers\PaymentPlatformResolver;
 use App\Services\PayPalService;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    protected $paymentPlatformResolver;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(PaymentPlatformResolver $paymentPlatformResolver)
+    {
+        // $this->middleware('auth');
+
+        $this->paymentPlatformResolver = $paymentPlatformResolver;
+    }
     public function pay(Request $req)
     {
         $rules = [
@@ -18,38 +32,40 @@ class PaymentController extends Controller
         ];
         $req->validate($rules);
 
+        // dd($req);
         // $pay = PaymentPlatform::all();
         // $cur = Currency::all();
+        // $paymentPlatform = resolve(PaymentPlatform::class);
+        $paymentPlatform = $this->paymentPlatformResolver
+            ->resolveService($req->payment_platform);
 
-        return $req->all();
+        return $paymentPlatform->handlePayment($req);
+
+        // return $req->all();
     }
     public function approval(Request $request, PayPalService $paypal)
     {
-         $orderId = $request->get('token');
-        $result = $paypal->captureOrder($orderId);
-
-        dd($result); // untuk lihat hasilnya
-        // // return view('pages.approval');
-        //  $token = $request->query('token'); // ambil token dari URL
+        $orderId = $request->get('token');
 
         // if (!$token) {
-        //     return redirect('/')->with('error', 'Token tidak ditemukan');
-        // }
+        if (!$orderId) {
+            return redirect('/')->with('error', 'Token tidak ditemukan');
+        }
+        $result = $paypal->captureOrder($orderId);
 
-        // $paypal = new PayPalService();
-        // $result = $paypal->captureOrder($token);
-
+        // dd($result); // untuk lihat hasilnya
+        // // return view('pages.approval');
         // // Jika sukses
-        // if (isset($result->status) && $result->status === 'COMPLETED') {
-        //     // kirim data hasil capture ke halaman approval
-        //     return view('pages.approval', ['result' => $result]);
-        // }
+        if (isset($result->status) && $result->status === 'COMPLETED') {
+            // kirim data hasil capture ke halaman approval
+            return view('pages.approval', ['result' => $result]);
+        }
 
-        // // Jika gagal
-        // return view('pages.approval', [
-        //     'result' => $result,
-        //     'error'  => 'Transaksi gagal diselesaikan',
-        // ]);
+        // Jika gagal
+        return view('pages.approval', [
+            'result' => $result,
+            'error'  => 'Transaksi gagal diselesaikan',
+        ]);
     }
     public function canceled()
     {
