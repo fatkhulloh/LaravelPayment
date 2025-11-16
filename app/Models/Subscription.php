@@ -13,9 +13,13 @@ class Subscription extends Model
         'user_id',
         'plan_id'
     ];
-    protected $dates = [
-        'active_until'
+    protected $casts = [
+        'active_until' => 'datetime',
     ];
+
+    // protected $dates = [
+    //     'active_until'
+    // ];
 
     public function user()
     {
@@ -24,5 +28,9 @@ class Subscription extends Model
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+    public function isActive()
+    {
+        return $this->active_until->gt(now());
     }
 }

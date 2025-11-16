@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('image');
+            $table->boolean('subscriptions_enabled')->default(false);
             $table->timestamps();
         });
     }

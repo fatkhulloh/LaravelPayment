@@ -79,13 +79,13 @@
                         <div class="row">
                             <div class="col-auto">
                                 <p class="border-bottom border-primary rounded">
-                                    {{-- @if (!optional(auth()->user())->hasActiveSubscription()) --}}
-                                        {{-- Would you like a discount every time? --}}
+                                    @if (!optional(auth()->user())->hasActiveSubscription())
+                                        Would you like a discount every time?
                                         {{-- <a href="{{ route('subscribe.show') }}">Subscribe</a> --}}
-                                        {{-- <a href="/subscribe">Subscribe</a> --}}
-                                    {{-- @else --}}
+                                        <a href="/subscribe">Subscribe</a>
+                                    @else
                                         You get a <span class="font-weight-bold">10% off</span> as part of your subscription (this will be applied in the checkout).
-                                    {{-- @endif --}}
+                                    @endif
                                 </p>
                             </div>
                         </div>

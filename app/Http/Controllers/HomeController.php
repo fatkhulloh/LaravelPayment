@@ -12,7 +12,8 @@ class HomeController extends Controller
     {
         // $pay = PaymentPlatform::get();
         // $cur = Currency::get();
-        $pay = PaymentPlatform::all();
+        // $pay = PaymentPlatform::all();
+        $pay = PaymentPlatform::where('subscriptions_enabled', true)->get();
         $cur = Currency::all();
         return view('pages.beranda')->with([
             'currencies' => $cur,

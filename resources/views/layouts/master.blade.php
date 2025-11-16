@@ -34,14 +34,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        {{-- @if (! optional(auth()->user())->hasActiveSubscription()) --}}
+                        @if (!optional(auth()->user())->hasActiveSubscription())
                             <li class="nav-item">
-                                {{-- <a class="btn btn-outline-primary" href="{{ route('subscribe.show') }}"> --}}
-                                <a class="btn btn-outline-primary" href="/subscribe">
-                                    Subscribe
-                                </a>
+                                <a class="btn btn-outline-primary" href="{{ route('subscribe.show') }}">  Subscribe </a>
                             </li>
-                        {{-- @endif --}}
+                        @endif
                         <li class="nav-item">
                             {{-- <a class="nav-link" href="{{ route('home') }}">Home</a> --}}
                             <a class="nav-link" href="/">Home</a>
