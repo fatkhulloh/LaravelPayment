@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\PaymentPlatform;
 use App\Models\Plan;
+use App\Models\Subscription;
 use App\Resolvers\PaymentPlatformResolver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
@@ -19,6 +21,22 @@ class SubscriptionController extends Controller
     public function show(Request $req)
     {
         // dd($req);
+        if (!Auth::check()) {
+            return redirect('/login')->with('message', 'Silahkan login');
+        }
+        // $user = auth()->user();
+
+        // // Jika belum login → redirect
+        // if (!$user) {
+        //     return redirect()->route('login')->withErrors('Silakan login dulu.');
+        // }
+        $user = Auth::user();
+        // dd($user);
+        // Cek apakah sudah punya subscription aktif
+        if ($user->hasActiveSubscription()) {
+            return redirect('/')
+                ->with('message', 'Anda sudah memiliki subscription aktif.');
+        }
         $paymentPlatforms = PaymentPlatform::where('subscriptions_enabled', true)->get();
         // dd($paymentPlatforms);
         return view('pages.subscribe')->with([
@@ -46,9 +64,36 @@ class SubscriptionController extends Controller
         // return $paymentPlatform->handlePayment($request);
         return $paymentPlatform->handleSubscription($request);
     }
-    public function approval(Request $req)
+    public function approval(Request $request)
     {
-        dd($req);
+        // dd($req);
+          $rules = [
+            'plan' => ['required', 'exists:plans,slug'],
+        ];
+
+        $request->validate($rules);
+
+        if (session()->has('subscriptionPlatformId')) {
+            $paymentPlatform = $this->paymentPlatformResolver
+                ->resolveService(session()->get('subscriptionPlatformId'));
+
+            if ($paymentPlatform->validateSubscription($request)) {
+                $plan = Plan::where('slug', $request->plan)->firstOrFail();
+                $user = $request->user();
+
+                $subscription = Subscription::create([
+                    'active_until' => now()->addDays($plan->duration_in_days),
+                    'user_id' => $user->id,
+                    'plan_id' => $plan->id,
+                ]);
+
+                return redirect('/')
+                    // ->route('/')
+                    ->withSuccess(['payment' => "Thanks, {$user->name}. You have now a {$plan->slug} subscription. Start using it now."]);
+            }
+        }
+
+        return redirect()->route('subscribe.show')->withErrors('We cannot check your subscription. Try again, please.');
     }
     public function cancelled(Request $req)
     {
