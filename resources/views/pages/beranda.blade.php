@@ -29,7 +29,7 @@
                                 </small>
                             </div>
                             {{-- Currency --}}
-                            <div class="col-auto">
+                            {{-- <div class="col-auto">
                                 <label>Currency</label>
                                 <select class="custom-select" name="currency" required>
                                     @foreach ($currencies as $currency)
@@ -38,7 +38,19 @@
                                         </option>
                                     @endforeach
                                 </select>
+                            </div> --}}
+                            <div class="col-auto">
+                                <label>Currency</label>
+                                <select class="custom-select" name="currency" required>
+                                    @foreach ($currencies as $currency)
+                                        <option value="{{ $currency->iso }}"
+                                            {{ strtolower($currency->iso) == 'usd' ? 'selected' : '' }}>
+                                            {{ strtoupper($currency->iso) }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
+
                         </div>
                         <div class="row mt-3">
                             <div class="col">

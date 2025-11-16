@@ -17,6 +17,7 @@ class CurrenciesSeeder extends Seeder
             'usd',
             'eur',
             'gbp',
+            // 'jpy',
         ];
         foreach($Currencies as $cur)
         {

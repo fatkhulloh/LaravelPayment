@@ -56,6 +56,15 @@ class PayPalService
     {
         return json_decode($response);
     }
+    public function resolveFactor($currency)
+    {
+        $zeroDecimalCurrency = ['jpy'];
+        if(in_array(strtoupper($currency), $zeroDecimalCurrency))
+        {
+            return 1;
+        }
+        return 100;
+    }
 
     // Membuat order
     public function createOrder($value, $currency = 'USD')
@@ -70,7 +79,7 @@ class PayPalService
                     [
                         "amount" => [
                             "currency_code" => strtoupper($currency),
-                            "value" => $value
+                            "value" => round($value * $factor = $this->resolveFactor($currency)) / $factor,
                         ]
                     ]
                 ],
@@ -124,14 +133,14 @@ class PayPalService
         // return redirect($approve->href);
 
 
-          $order = $this->createOrder($req->value, $req->currency);
+        $order = $this->createOrder($req->value, $req->currency);
 
         // Kumpulkan semua link dari respons PayPal
         $orderLinks = collect($order->links);
 
         // Ambil link untuk "approve"
         $approve = $orderLinks->where('rel', 'approve')->first();
-
+        session()->put('approvalId', $order->id);
         // Redirect ke halaman approval PayPal
         return redirect($approve->href);
     }

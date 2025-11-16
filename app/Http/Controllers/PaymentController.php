@@ -36,9 +36,9 @@ class PaymentController extends Controller
         // $pay = PaymentPlatform::all();
         // $cur = Currency::all();
         // $paymentPlatform = resolve(PaymentPlatform::class);
-        $paymentPlatform = $this->paymentPlatformResolver
-            ->resolveService($req->payment_platform);
+        $paymentPlatform = $this->paymentPlatformResolver->resolveService($req->payment_platform);
 
+        session()->put('paymentPlatformId', $req->payment_platform);
         return $paymentPlatform->handlePayment($req);
 
         // return $req->all();
@@ -56,6 +56,10 @@ class PaymentController extends Controller
         // dd($result); // untuk lihat hasilnya
         // // return view('pages.approval');
         // // Jika sukses
+        if(session()->has('paymentPlatformId'))
+        {
+
+        }
         if (isset($result->status) && $result->status === 'COMPLETED') {
             // kirim data hasil capture ke halaman approval
             return view('pages.approval', ['result' => $result]);
@@ -67,9 +71,21 @@ class PaymentController extends Controller
             'error'  => 'Transaksi gagal diselesaikan',
         ]);
     }
-    public function canceled()
+    public function canceled(Request $request)
     {
-
+        // $token = $request->query('token'); // ambil token
+        // return "Token ada: " . $token;
+        if (!$request->has('token')) {
+            return redirect('/');
+        }
+        // else {
+        //     return "Token tidak ada!";
+        // }
+          // Jika gagal
+        return view('pages.canceled', [
+            'result' => 'Gagal',
+            'error'  => 'Transaksi gagal diselesaikan',
+        ]);
     }
 
 }
