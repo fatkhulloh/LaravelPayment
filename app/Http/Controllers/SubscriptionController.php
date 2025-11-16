@@ -52,6 +52,7 @@ class SubscriptionController extends Controller
     }
     public function cancelled(Request $req)
     {
-        dd($req);
+        // dd($req);
+        return redirect()->route('subscribe.show');
     }
 }
