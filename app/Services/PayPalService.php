@@ -129,7 +129,7 @@ class PayPalService
     }
     public function handlePayment(Request $req)
     {
-        dd($req);
+        // dd($req);
         // $order = $this->createOrder($req->value, $req->currency);
         // // $orderLink = collect($order->link);
         // // $approve = $orderLink->where('rel', 'approve')->first;
